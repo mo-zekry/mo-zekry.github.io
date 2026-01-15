@@ -1,0 +1,19 @@
+---
+layout: layouts/base.njk
+title: المقالات — محمد زكري
+lang: ar
+---
+
+<h2 dir="rtl">المقالات</h2>
+{% if collections.postsAr.length %}
+<ul class="post-list" dir="rtl">
+  {% for post in collections.postsAr %}
+    <li>
+      <a class="post-title" href="{{ post.url }}">{{ post.data.title }}</a>
+      <span class="post-date">{{ post.date | date }}</span>
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="text-muted" dir="rtl">لا توجد مقالات بعد. ترقبوا المزيد!</p>
+{% endif %}

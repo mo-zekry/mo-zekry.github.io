@@ -1,0 +1,46 @@
+---
+layout: layouts/base.njk
+title: Home — Mohamed Zekry Tech Blog
+---
+
+{% set en = collections.postsEn %}
+{% set ar = collections.postsAr %}
+
+<section>
+  <h2>Welcome 👋</h2>
+  <p>This is a bilingual tech blog featuring articles in <strong>English</strong> and <strong>Arabic</strong>. Each post provides a link to its raw Markdown source.</p>
+</section>
+
+<section>
+  <h2>Latest Posts (English)</h2>
+  {% if en.length %}
+  <ul class="post-list">
+    {% for post in en %}
+      <li>
+        <a class="post-title" href="{{ post.url }}">{{ post.data.title }}</a>
+        <span class="post-date">{{ post.date | date }}</span>
+        <a class="md-link" href="https://raw.githubusercontent.com/{{ site.repoOwner }}/{{ site.repoName }}/{{ site.branch }}/{{ post.page.inputPath }}">.md</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No posts yet.</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>أحدث المقالات (عربي)</h2>
+  {% if ar.length %}
+  <ul class="post-list" dir="rtl">
+    {% for post in ar %}
+      <li>
+        <a class="post-title" href="{{ post.url }}">{{ post.data.title }}</a>
+        <span class="post-date">{{ post.date | date }}</span>
+        <a class="md-link" href="https://raw.githubusercontent.com/{{ site.repoOwner }}/{{ site.repoName }}/{{ site.branch }}/{{ post.page.inputPath }}">.md</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">لا توجد مقالات عربية بعد.</p>
+  {% endif %}
+</section>

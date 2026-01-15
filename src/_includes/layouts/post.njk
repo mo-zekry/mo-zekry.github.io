@@ -1,0 +1,64 @@
+---
+layout: layouts/base.njk
+---
+<article lang="{{ lang or 'en' }}" class="post" {% if lang == 'ar' %}dir="rtl"{% endif %}>
+  <nav class="post-breadcrumb">
+    <a href="/{{ lang or 'en' }}/"><span class="emoji" aria-hidden="true">🏠</span> {{ 'الرئيسية' if lang == 'ar' else 'Home' }}</a> · <a href="/{{ lang or 'en' }}/"><span class="emoji" aria-hidden="true">📝</span> {{ 'المدونة' if lang == 'ar' else 'Blog' }}</a>
+  </nav>
+  <h2>{{ title }}</h2>
+  <p class="meta">
+    <time datetime="{{ date | date }}">{{ date | date }}</time>
+    {% if tags %} · {{ tags | join(", ") }}{% endif %}
+    {% if content %}
+      {% if lang == 'ar' %}
+        · {{ content | wordCount }} كلمة · ~{{ content | readingTime }} دقيقة قراءة
+      {% else %}
+        · {{ content | wordCount }} words · ~{{ content | readingTime }} min read
+      {% endif %}
+    {% endif %}
+  </p>
+
+  {# Render headings with ids and generate server-side TOC #}
+  {% set rendered = content | addHeadingIds %}
+
+  <details class="toc-details">
+    <summary><span class="emoji" aria-hidden="true">📚</span> {{ 'جدول المحتويات' if lang == 'ar' else 'Table of Contents' }}</summary>
+    <nav id="TableOfContents">{{ rendered | generateToc | safe }}</nav>
+  </details>
+
+  <div class="content">
+    {{ rendered | safe }}
+  </div>
+
+  <nav class="post-nav">
+    {% if lang == 'ar' %}
+      {% set col = collections.postsAr %}
+    {% else %}
+      {% set col = collections.postsEn %}
+    {% endif %}
+    {% set idx = -1 %}
+    {% for item in col %}
+      {% if item.url == page.url %}
+        {% set idx = loop.index0 %}
+      {% endif %}
+    {% endfor %}
+    <div class="post-nav-prev">
+      {% if idx > 0 %}
+        {% set prev = col[idx-1] %}
+        <a href="{{ prev.url }}" rel="prev"><span class="emoji" aria-hidden="true">⬅️</span> {{ prev.data.title or prev.data.pageTitle or prev.data.slug }}</a>
+      {% endif %}
+    </div>
+    <div class="post-nav-next">
+      {% if idx >= 0 and idx < (col | length) - 1 %}
+        {% set next = col[idx+1] %}
+        <a href="{{ next.url }}" rel="next">{{ next.data.title or next.data.pageTitle or next.data.slug }} <span class="emoji" aria-hidden="true">➡️</span></a>
+      {% endif %}
+    </div>
+  </nav>
+
+  {% include "partials/sharingbuttons.njk" %}
+
+  {# raw markdown link removed per request #}
+
+  <button id="back-to-top" title="{{ 'الرجوع للأعلى' if lang == 'ar' else 'Back to Top' }}"><span class="emoji" aria-hidden="true">⬆️</span> {{ 'الرجوع للأعلى' if lang == 'ar' else 'Back to Top' }}</button>
+</article>

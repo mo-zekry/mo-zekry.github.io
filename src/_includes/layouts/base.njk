@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="{{ lang or 'en' }}" dir="{{ 'rtl' if (lang == 'ar') else 'ltr' }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{{ title or site.title }}</title>
+    <meta name="description" content="{{ description or 'Tech blog by Mohamed Zekry — English & Arabic articles' }}" />
+
+    <!-- Fonts preload -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+
+    <!-- Math rendering via MathJax (client-side) -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          displayMath: [['$$','$$']]
+        },
+        options: {
+          skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+
+    <!-- Mermaid for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+
+    <!-- PrismJS theme for Eleventy syntax highlighting plugin -->
+    <!-- PrismJS Tomorrow theme (preferred by many developers) -->
+    <link rel="stylesheet" href="https://unpkg.com/prismjs@1.29.0/themes/prism-tomorrow.min.css" />
+    <!-- PrismJS core, Toolbar, and Copy-to-Clipboard plugins -->
+    <script src="https://unpkg.com/prismjs@1.29.0/prism.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-css.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/prismjs@1.29.0/plugins/toolbar/prism-toolbar.css" />
+    <script src="https://unpkg.com/prismjs@1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+  <!-- PrismJS Line Numbers plugin -->
+  <link rel="stylesheet" href="https://unpkg.com/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css" />
+  <script src="https://unpkg.com/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <script>
+      // Customize the copy button label and style (use a unique key to avoid duplicate registration)
+      (function() {
+        try {
+          if (Prism && Prism.plugins && Prism.plugins.toolbar && typeof Prism.plugins.toolbar.registerButton === 'function') {
+            Prism.plugins.toolbar.registerButton('custom-copy-to-clipboard', function (env) {
+              var linkCopy = document.createElement('button');
+              linkCopy.className = 'custom-prism-copy';
+              var I18N = {
+                copyCode: "{{ 'نسخ الكود' if lang == 'ar' else '📋 Copy Code' }}",
+                copied: "{{ 'تم النسخ!' if lang == 'ar' else '✅ Copied!' }}",
+                home: "{{ 'الرئيسية' if lang == 'ar' else 'Home' }}",
+                blog: "{{ 'المدونة' if lang == 'ar' else 'Blog' }}",
+                toc: "{{ 'جدول المحتويات' if lang == 'ar' else 'Table of Contents' }}",
+                backToTop: "{{ 'الرجوع للأعلى' if lang == 'ar' else 'Back to Top' }}",
+                toggleTheme: "{{ 'تبديل السمة' if lang == 'ar' else 'Toggle theme' }}"
+              };
+              linkCopy.textContent = I18N.copyCode;
+              linkCopy.addEventListener('click', function () {
+                if (navigator && navigator.clipboard) {
+                  navigator.clipboard.writeText(env.code);
+                  linkCopy.textContent = I18N.copied;
+                  setTimeout(function () {
+                    linkCopy.textContent = I18N.copyCode;
+                  }, 1200);
+                }
+              });
+              return linkCopy;
+            });
+          }
+        } catch (e) {
+          // ignore duplicate registration or other Prism toolbar issues
+        }
+      })();
+    </script>
+
+    <!-- Auto-add line-numbers class to all code blocks -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('pre > code').forEach(function(code) {
+          var pre = code.parentElement;
+          if (!pre.classList.contains('line-numbers')) {
+            pre.classList.add('line-numbers');
+          }
+        });
+        // Re-run Prism after adding the class so line numbers appear
+        if (window.Prism && typeof Prism.highlightAll === 'function') {
+          Prism.highlightAll();
+        }
+      });
+    </script>
+
+    <!-- Theme initialization (prevent flash) -->
+    <script>
+      (function() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+
+    <!-- Auto-redirect root to system language (en/ar) unless user saved a preference -->
+    <script>
+      (function() {
+        try {
+          const p = location.pathname;
+          if (p === '/' || p === '/index.html') {
+            const saved = localStorage.getItem('lang');
+            if (saved === 'en' || saved === 'ar') {
+              location.replace('/' + saved + '/');
+              return;
+            }
+            const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+            const lang = nav.startsWith('ar') ? 'ar' : 'en';
+            location.replace('/' + lang + '/');
+          }
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1 class="site-brand">
+          <a href="/">
+            <div id="logo-root" class="site-logo" role="img" aria-label="{{ site.title }}"></div>
+          </a>
+        </h1>
+
+        <nav id="site-nav" class="site-nav" role="navigation">
+          <a href="/">🏠 {{ 'الرئيسية' if lang == 'ar' else 'Home' }}</a>
+        </nav>
+
+        <div class="site-controls">
+          <button id="nav-toggle" class="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="{{ 'قائمة' if lang == 'ar' else 'Menu' }}">☰</button>
+          <button id="lang-toggle" class="lang-toggle" aria-label="{{ 'تبديل اللغة' if lang == 'ar' else 'Switch language' }}" title="{{ 'تبديل اللغة' if lang == 'ar' else 'Switch language' }}" data-current="{{ lang or 'en' }}">🌐 {{ 'EN' if (lang == 'ar') else 'AR' }}</button>
+          <button class="theme-toggle" aria-label="{{ 'تبديل السمة' if lang == 'ar' else 'Toggle theme' }}" title="{{ 'تبديل الوضع الفاتح/الداكن' if lang == 'ar' else 'Toggle light/dark mode' }}">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      {{ content | safe }}
+    </main>
+
+    <footer class="site-footer container">
+      <p>&copy; {{ "now" | date("yyyy") }} {{ site.title }}</p>
+    </footer>
+
+    <!-- Theme toggle script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.querySelector('.theme-toggle');
+        const icon = toggle ? toggle.querySelector('.theme-icon') : null;
+
+        if (!toggle || !icon) return;
+
+        function updateIcon(theme) {
+          icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Set initial icon
+        updateIcon(document.documentElement.getAttribute('data-theme') || 'light');
+
+        toggle.addEventListener('click', function() {
+          const current = document.documentElement.getAttribute('data-theme') || 'light';
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          updateIcon(next);
+
+          // Re-initialize Mermaid with new theme
+          if (typeof mermaid !== 'undefined') {
+            mermaid.initialize({ startOnLoad: false, theme: next === 'dark' ? 'dark' : 'default' });
+            document.querySelectorAll('.mermaid').forEach(function(el) {
+              const code = el.getAttribute('data-mermaid-src');
+              if (code) {
+                el.innerHTML = code;
+                mermaid.init(undefined, el);
+              }
+            });
+          }
+        });
+      });
+    </script>
+
+    <!-- Mermaid initialization -->
+    <script>
+      (function() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: theme === 'dark' ? 'dark' : 'default',
+          securityLevel: 'loose',
+          fontFamily: 'inherit'
+        });
+
+        // Store source for re-render on theme change
+        document.querySelectorAll('.mermaid').forEach(el => {
+          el.setAttribute('data-mermaid-src', el.textContent);
+        });
+      })();
+    </script>
+
+    <!-- Math rendering client-side with MathJax; markdown retains TeX delimiters -->
+    <script defer src="/assets/js/logo-canvas.js"></script>
+    <script defer src="/assets/js/prefs.js"></script>
+    <script defer src="/assets/js/post-ux.js"></script>
+  </body>
+</html>
