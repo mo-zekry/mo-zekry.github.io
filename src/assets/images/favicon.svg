@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Mohamed Zekry">
+  <rect width="64" height="64" rx="10" fill="#2563EB" />
+
+  <!-- Left 'M' bracket in foreground (white) -->
+  <g fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M14 14 L14 50" />
+    <path d="M14 14 L24 32 L34 14" />
+  </g>
+
+  <!-- Right 'Z' mark in accent color -->
+  <g fill="none" stroke="#3fc1c9" stroke-width="3.3" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M44 17 H54" />
+    <path d="M51 20 L37 44" />
+    <path d="M37 47 H54" />
+  </g>
+
+  <!-- Subtle corner hints (low-opacity, white) -->
+  <g fill="none" stroke="#ffffff" stroke-width="2" opacity="0.15" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M9 21 L9 14 L16 14" />
+    <path d="M55 50 L55 43 L48 43" />
+  </g>
+</svg>
