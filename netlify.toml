@@ -1,0 +1,7 @@
+[build]
+  publish = "docs"
+  command = "npm run build"
+
+# Optional: set build environment, Node version
+[build.environment]
+  NODE_VERSION = "18"
