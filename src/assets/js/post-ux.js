@@ -135,8 +135,9 @@ function drawIcon(ctx, x, y, size, accent, fg) {
     const iconSize = Math.round(height - padding * 0.8);
 
     // determine colors from CSS variables for theme compatibility
+    // prefer explicit --accent if provided, otherwise fall back to --link
     const fg = getColor('--text', '#0f1720') || '#0f1720';
-    const accent = getColor('--accent', '#3fc1c9') || '#3fc1c9';
+    const accent = getColor('--accent', '') || getColor('--link', '#3fc1c9') || '#3fc1c9';
 
     // container
     if (!root) return;
@@ -181,6 +182,23 @@ function drawIcon(ctx, x, y, size, accent, fg) {
     const root = document.getElementById('logo-root') || document.querySelector('.site-brand');
     if (root) {
       renderLogo(root, {});
+
+      // Re-render the logo when theme changes (data-theme attribute on <html>)
+      const docEl = document.documentElement;
+      const mo = new MutationObserver((entries) => {
+        for (const e of entries) {
+          if (e.type === 'attributes' && e.attributeName === 'data-theme') {
+            // defer to allow CSS variables to take effect
+            requestAnimationFrame(() => renderLogo(root, {}));
+          }
+        }
+      });
+      mo.observe(docEl, { attributes: true, attributeFilter: ['data-theme'] });
+
+      // re-render on resize / DPR change to keep canvas crisp
+      let dpr = window.devicePixelRatio || 1;
+      window.addEventListener('resize', () => renderLogo(root, {}));
+      window.matchMedia(`(resolution: ${dpr}dppx)`).addEventListener?.('change', () => renderLogo(root, {}));
     }
   });
 
