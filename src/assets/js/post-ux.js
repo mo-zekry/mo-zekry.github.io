@@ -1,3 +1,20 @@
+// Show loading overlay utility
+function showThemeLoadingOverlay() {
+  const overlay = document.getElementById('theme-loading-overlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    overlay.setAttribute('aria-hidden', 'false');
+  }
+}
+// Add loading overlay to language switcher
+document.addEventListener('DOMContentLoaded', function() {
+  const langToggle = document.getElementById('lang-toggle');
+  if (langToggle) {
+    langToggle.addEventListener('click', function() {
+      showThemeLoadingOverlay();
+    }, { capture: true });
+  }
+});
 // Draw a minimal, developer-focused horizontal logo into a canvas
 // Usage: add a container element where you want the logo, e.g.:
 //   <div id="logo-root" class="site-brand"></div>
@@ -188,8 +205,11 @@ function drawIcon(ctx, x, y, size, accent, fg) {
       const mo = new MutationObserver((entries) => {
         for (const e of entries) {
           if (e.type === 'attributes' && e.attributeName === 'data-theme') {
-            // defer to allow CSS variables to take effect
-            requestAnimationFrame(() => renderLogo(root, {}));
+            // Show loading overlay before reload
+            showThemeLoadingOverlay();
+            setTimeout(() => {
+              location.reload();
+            }, 200);
           }
         }
       });

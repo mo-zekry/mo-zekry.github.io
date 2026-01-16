@@ -7,6 +7,22 @@
     <title>{{ title or site.title }}</title>
     <meta name="description" content="{{ description or 'Tech blog by Mohamed Zekry — English & Arabic articles' }}" />
 
+  {#-- Social sharing meta tags for Open Graph (Facebook, LinkedIn) and Twitter/X --#}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ title or site.title }}" />
+  <meta property="og:description" content="{{ description or 'Tech blog by Mohamed Zekry — English & Arabic articles' }}" />
+  <meta property="og:url" content="{{ page.url or site.url or 'https://mo-zekry.github.io' }}" />
+  <meta property="og:site_name" content="{{ site.title }}" />
+  <meta property="og:locale" content="{{ 'ar_AR' if lang == 'ar' else 'en_US' }}" />
+  <meta property="og:image" content="{{ og_image or '/assets/images/favicon.svg' }}" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ title or site.title }}" />
+  <meta name="twitter:description" content="{{ description or 'Tech blog by Mohamed Zekry — English & Arabic articles' }}" />
+  <meta name="twitter:image" content="{{ og_image or '/assets/images/favicon.svg' }}" />
+  <meta name="twitter:site" content="@mo_zekry" />
+  <meta name="twitter:creator" content="@mo_zekry" />
+
     <!-- Fonts preload -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -139,6 +155,36 @@
     </script>
   </head>
   <body>
+    <div class="theme-loading-overlay" id="theme-loading-overlay" aria-hidden="true">
+      <div class="theme-loading-spinner" role="status" aria-label="Loading"></div>
+    </div>
+        <style>
+          .theme-loading-overlay {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+          }
+          html[data-theme="dark"] .theme-loading-overlay {
+            background: #181926;
+          }
+          .theme-loading-spinner {
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid #2563EB;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        </style>
     <header class="site-header">
       <div class="container">
         <h1 class="site-brand">
@@ -228,5 +274,6 @@
     <script defer src="/assets/js/logo-canvas.js"></script>
     <script defer src="/assets/js/prefs.js"></script>
     <script defer src="/assets/js/post-ux.js"></script>
+    <script defer src="/assets/js/sharing.js"></script>
   </body>
 </html>
