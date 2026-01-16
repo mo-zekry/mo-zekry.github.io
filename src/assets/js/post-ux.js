@@ -124,9 +124,9 @@ function drawIcon(ctx, x, y, size, accent, fg) {
   function drawText(ctx, x, y, name, fg, accent) {
     // name: author text
     ctx.fillStyle = fg;
-    // Use a clean, slightly heavy sans for the author
+    // Use a custom font for the author name
     const fontSize = 14;
-    ctx.font = `600 ${fontSize}px Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial`;
+    ctx.font = `700 ${fontSize}px 'Quintessential', 'Montserrat', 'Inter', sans-serif`;
     ctx.textBaseline = 'middle';
     ctx.fillText(name, x, y);
 
